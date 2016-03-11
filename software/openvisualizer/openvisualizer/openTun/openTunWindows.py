@@ -46,6 +46,8 @@ def TAP_CONTROL_CODE(request, method):
 TAP_IOCTL_SET_MEDIA_STATUS        = TAP_CONTROL_CODE( 6, 0)
 TAP_IOCTL_CONFIG_TUN              = TAP_CONTROL_CODE(10, 0)
 
+MIN_DEVICEIO_BUFFER_SIZE          = 1
+
 #============================ helper classes ==================================
 MIN_DEVICEIO_BUFFER_SIZE          = 1
 class TunReadThread(threading.Thread):
