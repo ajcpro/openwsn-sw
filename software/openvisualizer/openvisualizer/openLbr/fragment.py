@@ -286,7 +286,7 @@ class Fragment(eventBusClient.eventBusClient):
                 del self.sndfragments[stag]
 	else: #if incoming == 2
 	    for msg in self.sndfragments:
-	        if str(msg['nextHop']) == tag:
+	        if str(msg['nextHop']) == stag:
 		    del msg
         
         #return 
