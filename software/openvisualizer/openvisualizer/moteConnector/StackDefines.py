@@ -1,6 +1,6 @@
 # DO NOT EDIT DIRECTLY!
 # This file was generated automatically by GenStackDefines.py
-# on Sat, 02 Apr 2016 11:35:54
+# on Tue, 19 Apr 2016 18:11:57
 #
 
 components = {
@@ -112,6 +112,7 @@ errorDescriptions = {
   62: "the cells reserved to request mote contains slot {0} and slot {1}",
   63: "trying to get an used fragment",
   64: "no free fragment buffer at {0}",
-  65: "fragment timer expired",
-  66: "a memory area or fragment overlaps",
+  65: "a fragment overlaps with a previously received one",
+  66: "fragment timer expired",
+  67: "a memory area overlaps",
 }
