@@ -1,6 +1,6 @@
 # DO NOT EDIT DIRECTLY!
 # This file was generated automatically by GenStackDefines.py
-# on Tue, 19 Apr 2016 18:11:57
+# on Tue, 17 May 2016 01:41:16
 #
 
 components = {
@@ -57,7 +57,7 @@ errorDescriptions = {
    7: "wrong TCP state {0} (code location {1})",
    8: "TCP reset while in state {0} (code location {1})",
    9: "unsupported port number {0} (code location {1})",
-  10: "unexpected DAO (code location {0})",
+  10: "unexpected DAO (code location {0}). A change maybe happened on dagroot node.",
   11: "unsupported ICMPv6 type {0} (code location {1})",
   12: "unsupported 6LoWPAN parameter {1} at location {0}",
   13: "no next hop",
@@ -110,9 +110,10 @@ errorDescriptions = {
   60: "sixtop return code {0} at sixtop state {1}",
   61: "there are {0} cells to request mote",
   62: "the cells reserved to request mote contains slot {0} and slot {1}",
-  63: "trying to get an used fragment",
-  64: "no free fragment buffer at {0}",
-  65: "a fragment overlaps with a previously received one",
-  66: "fragment timer expired",
-  67: "a memory area overlaps",
+  63: "the slot {0} to be added is already in schedule",
+  64: "trying to get an used fragment",
+  65: "no free fragment buffer at {0}",
+  66: "a fragment overlaps with a previously received one",
+  67: "fragment timer expired",
+  68: "a memory area overlaps",
 }
