@@ -1,6 +1,6 @@
 # DO NOT EDIT DIRECTLY!
 # This file was generated automatically by GenStackDefines.py
-# on Tue, 17 May 2016 01:41:16
+# on Mon, 27 Jun 2016 21:10:47
 #
 
 components = {
@@ -115,5 +115,6 @@ errorDescriptions = {
   65: "no free fragment buffer at {0}",
   66: "a fragment overlaps with a previously received one",
   67: "fragment timer expired",
-  68: "a memory area overlaps",
+  68: "no available memory",
+  69: "a memory area overlaps",
 }
