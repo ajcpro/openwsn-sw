@@ -1,6 +1,6 @@
 # DO NOT EDIT DIRECTLY!
 # This file was generated automatically by GenStackDefines.py
-# on Mon, 27 Jun 2016 21:10:47
+# on Sun, 23 Oct 2016 10:38:41
 #
 
 components = {
@@ -45,6 +45,7 @@ components = {
   38: "UINJECT",
   39: "RRT",
   40: "SECURITY",
+  41: "USERIALBRIDGE",
 }
 
 errorDescriptions = {
@@ -117,4 +118,31 @@ errorDescriptions = {
   67: "fragment timer expired",
   68: "no available memory",
   69: "a memory area overlaps",
+}
+
+sixtop_returncode = {
+   6: "RC_SUCCESS",
+   7: "RC_ERR_VER",
+   8: "RC_ERR_SFID",
+   9: "RC_ERR_BUSY",
+  10: "RC_ERROR_NORES",
+  11: "RC_ERR_RESET",
+  12: "RC_ERR",
+}
+
+sixtop_statemachine = {
+   0: "IDLE",
+   1: "SENDING_REQUEST",
+   2: "WAIT_ADDREQUEST_SENDDONE",
+   3: "WAIT_DELETEREQUEST_SENDDONE",
+   4: "WAIT_COUNTREQUEST_SENDDONE",
+   5: "WAIT_LISTREQUEST_SENDDONE",
+   6: "WAIT_CLEARREQUEST_SENDDONE",
+   7: "WAIT_ADDRESPONSE",
+   8: "WAIT_DELETERESPONSE",
+   9: "WAIT_COUNTRESPONSE",
+  10: "WAIT_LISTRESPONSE",
+  11: "WAIT_CLEARRESPONSE",
+  12: "REQUEST_RECEIVED",
+  13: "WAIT_RESPONSE_SENDDONE",
 }
