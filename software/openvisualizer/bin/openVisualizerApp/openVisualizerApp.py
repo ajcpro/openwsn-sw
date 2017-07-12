@@ -17,17 +17,17 @@ from openvisualizer.OVtracer import OVtracer
 
 log = logging.getLogger('openVisualizerApp')
 
-from openvisualizer.eventBus      import eventBusMonitor
-from openvisualizer.moteProbe     import moteProbe
-from openvisualizer.moteConnector import moteConnector
-from openvisualizer.moteState     import moteState
-from openvisualizer.RPL           import RPL
-from openvisualizer.openLbr       import openLbr
-from openvisualizer.openLbr       import fragment
-from openvisualizer.openTun       import openTun
-from openvisualizer.RPL           import UDPLatency
-from openvisualizer.RPL           import topology
-from openvisualizer               import appdirs
+from openvisualizer.eventBus        import eventBusMonitor
+from openvisualizer.moteProbe       import moteProbe
+from openvisualizer.moteConnector   import moteConnector
+from openvisualizer.moteState       import moteState
+from openvisualizer.RPL             import RPL
+from openvisualizer.openLbr         import openLbr
+from openvisualizer.openLbr         import fragment
+from openvisualizer.openTun         import openTun
+from openvisualizer.RPL             import UDPInject
+from openvisualizer.RPL             import topology
+from openvisualizer                 import appdirs
 from openvisualizer.remoteConnectorServer   import remoteConnectorServer
 
 import openvisualizer.openvisualizer_utils as u
@@ -38,7 +38,7 @@ class OpenVisualizerApp(object):
     top-level functionality for several UI clients.
     '''
     
-    def __init__(self,confdir,datadir,logdir,simulatorMode,numMotes,trace,debug,simTopology,iotlabmotes, pathTopo, roverMode):
+    def __init__(self,confdir,datadir,logdir,simulatorMode,numMotes,trace,debug,usePageZero,simTopology,iotlabmotes, pathTopo, roverMode):
         
         # store params
         self.confdir              = confdir
@@ -48,6 +48,7 @@ class OpenVisualizerApp(object):
         self.numMotes             = numMotes
         self.trace                = trace
         self.debug                = debug
+        self.usePageZero           = usePageZero
         self.iotlabmotes          = iotlabmotes
         self.pathTopo             = pathTopo
         self.roverMode            = roverMode
@@ -55,10 +56,10 @@ class OpenVisualizerApp(object):
         # local variables
         self.eventBusMonitor      = eventBusMonitor.eventBusMonitor()
 	self.fragment             = fragment.Fragment()
-        self.openLbr              = openLbr.OpenLbr()
+        self.openLbr              = openLbr.OpenLbr(usePageZero)
         self.rpl                  = RPL.RPL()
         self.topology             = topology.topology()
-        self.udpLatency           = UDPLatency.UDPLatency()
+        self.udpInject            = UDPInject.UDPInject()
         self.DAGrootList          = []
         # create openTun call last since indicates prefix
         self.openTun              = openTun.create() 
@@ -207,6 +208,31 @@ class OpenVisualizerApp(object):
         else:
             return None
 
+    def getMotesConnectivity(self):
+        motes  = []
+        states = []
+        edges  = []
+
+        for ms in self.moteStates:
+            idManager = ms.getStateElem(ms.ST_IDMANAGER)
+            if idManager and idManager.get16bAddr():
+                src_s = ''.join(['%02X'%b for b in idManager.get16bAddr()])
+                motes.append(src_s)
+            neighborTable = ms.getStateElem(ms.ST_NEIGHBORS)
+            for neighbor in neighborTable.data:
+                if len(neighbor.data)==0:
+                    break
+                if neighbor.data[0]['used']==1 and neighbor.data[0]['parentPreference']==1:
+                    dst_s =''.join(['%02X' %b for b in neighbor.data[0]['addr'].addr[-2:]])
+                    edges.append({ 'u':src_s, 'v':dst_s })
+                    break
+
+        motes = list(set(motes))
+        for mote in motes:
+            d = { 'id': mote, 'value': { 'label': mote } } 
+            states.append(d)
+        return states, edges
+        
     def refreshRoverMotes(self, roverMotes):
         '''Connect the list of roverMotes to openvisualiser.
 
@@ -280,7 +306,7 @@ def main(parser=None, roverMode=False):
         
     _addParserArgs(parser)
     argspace = parser.parse_args()
-    
+
     confdir, datadir, logdir = _initExternalDirs(argspace.appdir, argspace.debug)
     
     # Must use a '/'-separated path for log dir, even on Windows.
@@ -302,11 +328,12 @@ def main(parser=None, roverMode=False):
         argspace.numMotes = DEFAULT_MOTE_COUNT
 
     log.info('Initializing OpenVisualizerApp with options:\n\t{0}'.format(
-            '\n    '.join(['appdir   = {0}'.format(argspace.appdir),
-                           'sim      = {0}'.format(argspace.simulatorMode),
-                           'simCount = {0}'.format(argspace.numMotes),
-                           'trace    = {0}'.format(argspace.trace),
-                           'debug    = {0}'.format(argspace.debug)],
+            '\n    '.join(['appdir      = {0}'.format(argspace.appdir),
+                           'sim         = {0}'.format(argspace.simulatorMode),
+                           'simCount    = {0}'.format(argspace.numMotes),
+                           'trace       = {0}'.format(argspace.trace),
+                           'debug       = {0}'.format(argspace.debug),
+                           'usePageZero = {0}'.format(argspace.usePageZero)],
             )))
     log.info('Using external dirs:\n\t{0}'.format(
             '\n    '.join(['conf     = {0}'.format(confdir),
@@ -323,6 +350,7 @@ def main(parser=None, roverMode=False):
         numMotes        = argspace.numMotes,
         trace           = argspace.trace,
         debug           = argspace.debug,
+        usePageZero     = argspace.usePageZero,
         simTopology     = argspace.simTopology,
         iotlabmotes     = argspace.iotlabmotes,
         pathTopo        = argspace.pathTopo,
@@ -365,6 +393,12 @@ def _addParserArgs(parser):
         default    = False,
         action     = 'store_true',
         help       = 'enables application debugging'
+    )
+    parser.add_argument('-pagez', '--usePageZero',
+        dest       = 'usePageZero',
+        default    = False,
+        action     = 'store_true',
+        help       = 'use page number 0 in page dispatch (only works with one-hop)'
     )
     parser.add_argument('-iotm', '--iotlabmotes',
         dest       = 'iotlabmotes',
