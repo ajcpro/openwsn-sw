@@ -1,6 +1,6 @@
 # DO NOT EDIT DIRECTLY!
 # This file was generated automatically by GenStackDefines.py
-# on Wed, 12 Jul 2017 12:01:38
+# on Sun, 16 Jul 2017 14:05:11
 #
 
 components = {
@@ -49,6 +49,8 @@ components = {
   42: "USERIALBRIDGE",
   43: "UEXPIRATION",
   44: "UMONITOR",
+  45: "CJOIN",
+  47: "OPENOSCOAP",
 }
 
 errorDescriptions = {
@@ -119,12 +121,18 @@ errorDescriptions = {
   65: "the metadata type is not suppored",
   66: "the received packet has expired",
   67: "packet expiry time reached, dropped",
-  68: "trying to get an used fragment",
-  69: "no free fragment buffer at {0}",
-  70: "a fragment overlaps with a previously received one",
-  71: "fragment timer expired",
-  72: "no available memory",
-  73: "a memory area overlaps",
+  68: "node joined",
+  69: "OSCOAP sequence number reached maximum value",
+  70: "OSCOAP buffer overflow detected {code location {0}}",
+  71: "OSCOAP replay protection failed",
+  72: "OSCOAP decryption and tag verification failed",
+  73: "Aborted join process {code location {0}}",
+  74: "trying to get an used fragment",
+  75: "no free fragment buffer at {0}",
+  76: "a fragment overlaps with a previously received one",
+  77: "fragment timer {0} expired",
+  78: "no available memory",
+  79: "a memory area overlaps",
 }
 
 sixtop_returncode = {
